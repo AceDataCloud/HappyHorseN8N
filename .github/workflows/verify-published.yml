@@ -1,0 +1,68 @@
+name: Verify published package
+on:
+  pull_request:
+    paths:
+      - .github/workflows/verify-published.yml
+      - scripts/verify-published.mjs
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Existing verified npm version to check (no generation requests)
+        required: true
+        default: "0.1.1"
+        type: string
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PACKAGE_VERSION: ${{ inputs.version || '0.1.1' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+      - name: Verify registry bytes, official checksum, entrypoints and onboarding
+        run: node scripts/verify-published.mjs
+      - name: Scan published provenance and package security
+        run: |
+          set -o pipefail
+          npx --yes @n8n/scan-community-package@0.38.0 "@acedatacloud/n8n-nodes-happyhorse@$PACKAGE_VERSION" | tee artifacts/package-scan.log
+          grep -F 'has passed all security checks' artifacts/package-scan.log
+      - name: Load the exact verified tarball in fresh n8n 2.42.3
+        run: |
+          docker run --rm \
+            -v "$PWD/artifacts/published-package:/verified:ro" \
+            -v "$PWD/tests/load-workflow.json:/package/load-workflow.json:ro" \
+            -e N8N_DIAGNOSTICS_ENABLED=false \
+            -e N8N_VERSION_NOTIFICATIONS_ENABLED=false \
+            -e N8N_TEMPLATES_ENABLED=false \
+            --entrypoint sh n8nio/n8n:2.42.3 -ec '
+              mkdir -p /home/node/.n8n/nodes
+              npm install --prefix /home/node/.n8n/nodes --registry=https://registry.npmjs.org \
+                --legacy-peer-deps --ignore-scripts --no-audit --no-fund /verified/package.tgz
+              npm ls --prefix /home/node/.n8n/nodes --depth=0
+              export NODE_PATH=/usr/local/lib/node_modules/n8n/node_modules
+              export N8N_USER_FOLDER=/home/node
+              n8n import:workflow --input=/package/load-workflow.json
+              if n8n execute --id=aceHappyHorseSmokeTest >/tmp/n8n-load.log 2>&1; then
+                echo "Expected the credential-free task reader to stop before any API request" >&2
+                cat /tmp/n8n-load.log >&2
+                exit 1
+              fi
+              cat /tmp/n8n-load.log
+              if grep -Eiq "unrecognized node|unknown node|cannot find module|error loading|failed to load" /tmp/n8n-load.log; then
+                exit 1
+              fi
+              grep -Eiq "credential.*(not set|not found|missing|not configured|not available|required)|no credential|does not have any credentials" /tmp/n8n-load.log
+              echo "PASS: exact verified npm tarball loaded; execution stopped before an API call"
+            ' >artifacts/n8n-published-load.log 2>&1
+          cat artifacts/n8n-published-load.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: happyhorse-published-verification
+          path: artifacts/
