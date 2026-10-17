@@ -6,7 +6,7 @@
   "resources": {
     "primaryDocumentation": [
       {
-        "url": "https://github.com/AceDataCloud/HappyHorseN8N#readme"
+        "url": "https://github.com/AceDataCloud/HappyHorseN8N#use-the-node"
       }
     ],
     "credentialDocumentation": [
@@ -14,5 +14,6 @@
         "url": "https://github.com/AceDataCloud/HappyHorseN8N#credentials"
       }
     ]
-  }
+  },
+  "alias": ["happyhorse", "happy horse", "video generation"]
 }
