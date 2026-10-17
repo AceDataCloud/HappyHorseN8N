@@ -20,19 +20,35 @@ import { properties } from "./properties";
 import { buildRequest } from "./request";
 export class HappyHorse implements INodeType {
   description: INodeTypeDescription = {
-    displayName: "HappyHorse by AceDataCloud",
+    displayName: "HappyHorse by Ace Data Cloud",
     name: "happyHorse",
     icon: { light: "file:icon.png", dark: "file:icon.dark.png" },
     group: ["transform"],
     version: 1,
     subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
     description:
-      "Create HappyHorse videos from text, first frames or reference images, edit existing videos, and track generation tasks in workflows.",
-    defaults: { name: "HappyHorse by AceDataCloud" },
+      "Create and edit HappyHorse videos and retrieve the same task through Ace Data Cloud",
+    defaults: { name: "HappyHorse by Ace Data Cloud" },
     inputs: [NodeConnectionTypes.Main],
     outputs: [NodeConnectionTypes.Main],
     usableAsTool: true,
     credentials: [{ name: "aceDataHappyHorseApi", required: true }],
+    codex: {
+      alias: ["happyhorse", "happy horse", "video generation"],
+      categories: ["Marketing & Content"],
+      resources: {
+        primaryDocumentation: [
+          {
+            url: "https://github.com/AceDataCloud/HappyHorseN8N#use-the-node",
+          },
+        ],
+        credentialDocumentation: [
+          {
+            url: "https://github.com/AceDataCloud/HappyHorseN8N#credentials",
+          },
+        ],
+      },
+    },
     properties,
   };
   async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
