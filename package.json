@@ -1,7 +1,7 @@
 {
   "name": "@acedatacloud/n8n-nodes-happyhorse",
   "version": "0.1.1",
-  "description": "Create HappyHorse videos from text, first frames or reference images, edit existing videos, and track generation tasks in n8n via AceDataCloud.",
+  "description": "Create and edit HappyHorse videos and retrieve the same task through Ace Data Cloud.",
   "license": "MIT",
   "homepage": "https://github.com/AceDataCloud/HappyHorseN8N",
   "keywords": [
@@ -10,7 +10,11 @@
     "happyhorse",
     "text-to-video",
     "image-to-video",
-    "video-editing"
+    "video-editing",
+    "video",
+    "video-generation",
+    "acedata",
+    "ace-data-cloud"
   ],
   "author": {
     "name": "Ace Data Cloud",

@@ -7,7 +7,7 @@ import type {
 
 export class AceDataHappyHorseApi implements ICredentialType {
   name = "aceDataHappyHorseApi";
-  displayName = "HappyHorse by AceDataCloud API";
+  displayName = "HappyHorse by Ace Data Cloud API";
   documentationUrl =
     "https://github.com/AceDataCloud/HappyHorseN8N#credentials";
   icon = "file:../nodes/HappyHorse/icon.png" as const;
@@ -20,6 +20,13 @@ export class AceDataHappyHorseApi implements ICredentialType {
       default: "",
       required: true,
       description: "Your AceDataCloud application API token",
+    },
+    {
+      displayName:
+        'Create or copy an application API key in <a href="https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=happyhorsen8n_credential_api_key" target="_blank">Ace Data Cloud Applications</a>. Paste only the token into API Token; do not add Bearer.',
+      name: "keySetup",
+      type: "notice",
+      default: "",
     },
   ];
   authenticate: IAuthenticateGeneric = {
