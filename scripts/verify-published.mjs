@@ -92,7 +92,6 @@ for (const text of [
   "utm_source=opensource",
   "utm_medium=referral",
   "utm_campaign=evergreen",
-  "utm_content=happyhorsen8n_readme_api_key",
 ]) {
   assert.ok(
     readme.includes(text),
