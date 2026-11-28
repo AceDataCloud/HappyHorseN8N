@@ -20,7 +20,7 @@ import { properties } from "./properties";
 import { buildRequest } from "./request";
 export class HappyHorse implements INodeType {
   description: INodeTypeDescription = {
-    displayName: "HappyHorse by Ace Data Cloud",
+    displayName: "HappyHorse",
     name: "happyHorse",
     icon: { light: "file:icon.png", dark: "file:icon.dark.png" },
     group: ["transform"],
@@ -28,7 +28,7 @@ export class HappyHorse implements INodeType {
     subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
     description:
       "Create and edit HappyHorse videos and retrieve the same task through Ace Data Cloud",
-    defaults: { name: "HappyHorse by Ace Data Cloud" },
+    defaults: { name: "HappyHorse" },
     inputs: [NodeConnectionTypes.Main],
     outputs: [NodeConnectionTypes.Main],
     usableAsTool: true,

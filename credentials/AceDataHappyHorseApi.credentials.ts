@@ -7,7 +7,7 @@ import type {
 
 export class AceDataHappyHorseApi implements ICredentialType {
   name = "aceDataHappyHorseApi";
-  displayName = "HappyHorse by Ace Data Cloud API";
+  displayName = "HappyHorse API";
   documentationUrl =
     "https://github.com/AceDataCloud/HappyHorseN8N#credentials";
   icon = "file:../nodes/HappyHorse/icon.png" as const;
